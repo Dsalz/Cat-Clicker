@@ -6,7 +6,12 @@
     <title>Cat Clicker</title>
     <style>
         body{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .cat-item{
             text-align: center;
+            width: 50%;
         }
 
         .noofclicks{
@@ -18,6 +23,10 @@
             border: 2px solid cyan;
             margin-top: 40px;
         }
+
+        p{
+            color: cyan;
+        }
     
     </style>
     
@@ -26,24 +35,61 @@
 
 <body>
 
-<span class="noofclicks">0</span><br>
+    <!-- <section class="cat-item">
 
-<img src="cat.jpg"/>
+        <span class="noofclicks">0</span><br>
+
+        <p>Sebastian</p>
+
+        <img src="cat.jpg"/>
+
+    </section> -->
 
 
+    <script>
 
-<script>
+        var catarr = [
+            {
+                name: "Sebastain",
+                src: "cat.jpg"
+            },
+            {
+                name: "Sinbad",
+                src: "cat.jpg"
+            }
+        ]
 
-    document.querySelector('img').addEventListener('click', () =>{
+        for(let cat of catarr){
 
-        var currno = Number(document.querySelector('.noofclicks').textContent);
+            let secy = document.createElement('SECTION');
 
-        currno++;
+            secy.classList.add('cat-item');
 
-        document.querySelector('.noofclicks').textContent = currno;
-    })
+            secy.innerHTML = `<span class="noofclicks">0</span><br>
 
-</script>
+                                <p>${cat.name}</p>
+
+                                <img src="${cat.src}"/>`;
+
+            document.body.appendChild(secy);
+
+        }
+
+        document.querySelectorAll('img').forEach((img) => img.addEventListener('click', (e) =>{
+
+            let clickCounter = e.target.parentElement.querySelector('.noofclicks');
+
+            
+            var currno = Number(clickCounter.textContent);
+
+            currno++;
+
+            clickCounter.textContent = currno;
+            
+        })
+        )
+
+    </script>
 
 </body>
 
