@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang ="en">
+<head>
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Cat Clicker</title>
+    <style>
+        body{
+            text-align: center;
+        }
+
+        .noofclicks{
+            color: cyan;
+            font-size: 50px;
+        }
+
+        img{
+            border: 2px solid cyan;
+            margin-top: 40px;
+        }
+    
+    </style>
+    
+</head>
+
+
+<body>
+
+<span class="noofclicks">0</span><br>
+
+<img src="cat.jpg"/>
+
+
+
+<script>
+
+    document.querySelector('img').addEventListener('click', () =>{
+
+        var currno = Number(document.querySelector('.noofclicks').textContent);
+
+        currno++;
+
+        document.querySelector('.noofclicks').textContent = currno;
+    })
+
+</script>
+
+</body>
+
+
+</html>
