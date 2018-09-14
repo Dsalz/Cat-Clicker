@@ -31,10 +31,9 @@
         .cat-item{
             text-align: center;
             width: 50%;
-            display: none;
         }
 
-        .noofclicks{
+        .cat-item-clicks{
             color: rgb(31, 63, 63);
             font-size: 50px;
             width: 100%;
@@ -70,96 +69,198 @@
         </section>
 
         <section class="cat-item">
+               
+            <span class="cat-item-clicks"></span><br>
+                
+            <p class="cat-item-name"></p>
 
-            <span class="noofclicks">0</span><br>
-
-            <p>Sebastian</p>
-
-            <img src="cat.jpg"/>
-
+            <img class="cat-item-img" src="" alt=""/>
+        
         </section>
 
 
     <script>
 
+        //Array of cats (Application Model)
+
         var catarr = [
             {
                 name: "Sebastain",
-                src: "cat.jpg"
+                src: "cat.jpg",
+                clicks: 0
             },
             {
                 name: "Sinbad",
-                src: "cat-2.jpeg"
+                src: "cat-2.jpeg",
+                clicks: 0
             },
             {
                 name: "Singood",
-                src: "cat-3.jpeg"
+                src: "cat-3.jpeg",
+                clicks: 0
             },
             {
                 name: "Sinverybad",
-                src: "cat-4.jpeg"
+                src: "cat-4.jpeg",
+                clicks: 0
             },
             {
                 name: "Sinverygood",
-                src: "cat-5.jpeg"
+                src: "cat-5.jpeg",
+                clicks: 0
             }
-        ]
+        ];
 
-        for(let cat of catarr){
 
-            let linkup = document.createElement('a');
 
-            linkup.setAttribute('data-cat' , cat.name);
+        //Controller linking the model and view together
+        var controller = {
 
-            linkup.textContent = cat.name;
+            // Init function to be called only once when page is rendered
+            init: function(){
+                this.selectedCat = catarr[0];
+                listView.render();
+                catView.init();
+            },
 
-            document.body.querySelector('.cat-list').appendChild(linkup);
+            getSelectedCat: function(){
+                return this.selectedCat;
+            },
 
-            let secy = document.createElement('SECTION');
 
-            secy.classList.add('cat-item');
+            getCats: function(){
+                return catarr;
+            },
 
-            secy.setAttribute('id', cat.name);
+            showCat: function(catName){
 
-            secy.innerHTML = `<span class="noofclicks">0</span><br>
+                this.selectedCat = catarr.filter((cat) => cat.name === catName)[0];
+                catView.render();
 
-                                <p>${cat.name}</p>
+            },
 
-                                <img src="${cat.src}"/>`;
+            incrementClicks: function(){
+                // var clickedCat = catarr.filter((cat) => cat.name === catName);
+                // clickedCat.clicks++;
+                this.selectedCat.clicks++;
+                catView.render();
+            }
 
-            document.body.appendChild(secy);
+        };
+
+        //Cat List view
+        var listView = {
+
+            render: function(){
+                var cats = controller.getCats();
+
+                var catHtml = "";
+                
+               cats.forEach((cat) => catHtml += `<a data-cat = ${cat.name}>${cat.name}</a>`);
+
+                document.body.querySelector('.cat-list').innerHTML = catHtml;
+
+                document.querySelector('.cat-list').addEventListener('click', (e) => {
+            
+                    if(e.target.nodeName === 'A'){
+
+                        let cat = e.target.getAttribute('data-cat');
+
+                        controller.showCat(cat);
+                    }
+                })
+
+            }
+        }
+
+        var catView = {
+
+            init: function(){
+
+                this.clickCounter = document.querySelector('.cat-item-clicks');
+                this.catName = document.querySelector('.cat-item-name');
+                this.catImg = document.querySelector('.cat-item-img');
+
+                document.querySelector('img').addEventListener('click', function(){
+                    
+                    controller.incrementClicks();
+
+                });
+
+                this.render();
+
+            },
+
+            render: function(){
+
+                var selectedCat = controller.getSelectedCat();
+
+                this.clickCounter.textContent = selectedCat.clicks;
+                this.catName.textContent = selectedCat.name;
+                this.catImg.src = selectedCat.src;
+                this.catImg.alt = selectedCat.name;
+
+            }
 
         }
 
-        document.querySelector('.cat-list').addEventListener('click', (e) => {
+        controller.init();
+
+        // for(let cat of catarr){
+
+        //     let linkup = document.createElement('a');
+
+        //     linkup.setAttribute('data-cat' , cat.name);
+
+        //     linkup.textContent = cat.name;
+
+        //     document.body.querySelector('.cat-list').appendChild(linkup);
+
+        //     let secy = document.createElement('SECTION');
+
+        //     secy.classList.add('cat-item');
+
+        //     secy.setAttribute('id', cat.name);
+
+        //     secy.innerHTML = `<span class="noofclicks">0</span><br>
+
+        //                         <p>${cat.name}</p>
+
+        //                         <img src="${cat.src}"/>`;
+
+        //     document.body.appendChild(secy);
+
+        // }
+
+        // document.querySelector('.cat-list').addEventListener('click', (e) => {
             
-            if(e.target.nodeName === 'A'){
+        //     if(e.target.nodeName === 'A'){
 
-                let cat = e.target.getAttribute('data-cat');
+        //         let cat = e.target.getAttribute('data-cat');
 
-                var currshow = document.querySelector('.show');
+        //         var currshow = document.querySelector('.show');
 
-                if(currshow !== null){
-                    currshow.classList.remove('show');
-                }
+        //         if(currshow !== null){
+        //             currshow.classList.remove('show');
+        //         }
 
-                document.querySelector(`section#${cat}`).classList.add('show');
-            }
-        })
+        //         document.querySelector(`section#${cat}`).classList.add('show');
+        //     }
+        // })
 
-        document.querySelectorAll('img').forEach((img) => img.addEventListener('click', (e) =>{
+        // document.querySelectorAll('img').forEach((img) => img.addEventListener('click', (e) =>{
 
-            let clickCounter = e.target.parentElement.querySelector('.noofclicks');
+        //     let clickCounter = e.target.parentElement.querySelector('.noofclicks');
 
             
-            var currno = Number(clickCounter.textContent);
+        //     var currno = Number(clickCounter.textContent);
 
-            currno++;
+        //     currno++;
 
-            clickCounter.textContent = currno;
+        //     clickCounter.textContent = currno;
 
-        })
-        )
+        // })
+        // )
 
     </script>
 
