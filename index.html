@@ -46,12 +46,61 @@
 
         img{
             border: 2px solid rgb(31, 63, 63);
-            margin-top: 40px;
+            margin-top: 20px;
             width:100%;
         }
 
         p{
             color: rgb(31, 63, 63);
+        }
+
+        .admin{
+            width: 100%;
+            text-align:center;
+            padding: 2% 20%;
+            font-size: 15px; 
+        }
+
+        .admin input{
+            border: 1px solid rgb(31, 63, 63);
+            width: 100%;
+            padding: 0px 10px;
+            margin:10px 0; 
+            height: 40px;
+        }
+
+        button#admin-cancel{
+            color: white;
+            background-color: red;
+            width: 50%;
+            padding: 20px 30px;
+            border: none;
+        }
+
+        button#admin-save{
+            color: white;
+            background-color: rgb(31, 63, 63);
+            width: 50%;
+            padding: 20px 30px;
+            border: none;
+        }
+
+        .admin-btn{
+            background-color: rgb(31, 63, 63);
+            border: none;
+            border-radius: 5px;
+            padding: 20px 30px;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            margin: auto;
+            width: fit-content;
+        }
+
+        .admin-form{
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
         }
     
     </style>
@@ -77,6 +126,23 @@
             <img class="cat-item-img" src="" alt=""/>
         
         </section>
+
+        <section class="admin">
+            <button class="admin-btn">Admin</button>
+
+            <section class="admin-form">
+
+            </section>
+
+        </section>
+
+
+        <script type="template" id="admin-template">
+                <input id="admin-name" type="text" placeholder="Cat Name"/>
+                <input id="admin-img" type= "text" placeholder="Cat Image"/>
+                <button id="admin-cancel">Cancel</button>
+                <button id="admin-save">Save</button>
+        </script>
 
 
     <script>
@@ -119,8 +185,10 @@
             // Init function to be called only once when page is rendered
             init: function(){
                 this.selectedCat = catarr[0];
+                this.showAdmin = false;
                 listView.render();
                 catView.init();
+                adminView.init();
             },
 
             getSelectedCat: function(){
@@ -144,6 +212,28 @@
                 // clickedCat.clicks++;
                 this.selectedCat.clicks++;
                 catView.render();
+            },
+
+            revealAdmin: function(){
+                this.showAdmin = true;
+                adminView.render();
+            },
+
+            hideAdmin: function(){
+                this.showAdmin = false;
+                adminView.render();
+            },
+
+            adminAdd: function(catName, catSrc){
+
+                catarr.push({name: catName, src: catSrc, clicks: 0});
+
+                this.selectedCat = catarr[catarr.length - 1];
+
+                catView.render();
+
+                listView.render();
+
             }
 
         };
@@ -202,6 +292,71 @@
 
             }
 
+        }
+
+        var adminView = {
+
+            init: function(){
+                this.adminTemplate = document.getElementById('admin-template').innerHTML;
+                this.adminSection = document.querySelector('.admin-form');
+                this.adminVisible = false;
+
+                document.querySelector('.admin-btn').addEventListener('click', function(){
+                    
+                    controller.revealAdmin();
+
+                })
+
+            },
+
+            render: function(){
+
+                if(controller.showAdmin && !this.adminVisible){
+
+                    this.adminSection.innerHTML += this.adminTemplate;
+
+                    this.adminVisible = true;
+
+                    document.querySelector('#admin-cancel').addEventListener('click', function(){
+
+                        controller.hideAdmin();                       
+
+                    })
+
+                    document.querySelector('#admin-save').addEventListener('click', function(){
+ 
+                        let newCatName = document.querySelector('#admin-name').value;
+
+                        let newCatSrc = document.querySelector('#admin-img').value;
+
+                        if(newCatName!== "" && newCatSrc!== ""){
+
+                            controller.adminAdd(newCatName, newCatSrc);
+
+                            controller.hideAdmin();          
+                        }
+
+                        else{
+                            alert('Field cannot be empty')
+                        }            
+
+                    })
+
+                }
+                else if(!controller.showAdmin && this.adminVisible){
+
+                    this.adminSection.innerHTML = "";
+
+                    this.adminVisible = false;
+
+                }
+
+                else{
+                    return false;
+                }
+
+
+            }
         }
 
         controller.init();
