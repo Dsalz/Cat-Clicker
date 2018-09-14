@@ -9,23 +9,50 @@
             display: flex;
             flex-wrap: wrap;
         }
+
+        .cat-list{
+            width: 20%;
+            margin: 100px 10%;
+            color: #fff;
+            background-color: rgb(31, 63, 63);
+            height: fit-content;
+            margin-top: 100px;
+        }
+
+        .cat-list a{
+            width: 100%;
+            display: inline-block;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 2px solid #fff;
+            cursor: pointer;
+        }
+
         .cat-item{
             text-align: center;
             width: 50%;
+            display: none;
         }
 
         .noofclicks{
-            color: cyan;
+            color: rgb(31, 63, 63);
             font-size: 50px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .show{
+            display:block;
         }
 
         img{
-            border: 2px solid cyan;
+            border: 2px solid rgb(31, 63, 63);
             margin-top: 40px;
+            width:100%;
         }
 
         p{
-            color: cyan;
+            color: rgb(31, 63, 63);
         }
     
     </style>
@@ -35,15 +62,22 @@
 
 <body>
 
-    <!-- <section class="cat-item">
+        <!-- <span class="noofclicks">0</span><br> -->
 
-        <span class="noofclicks">0</span><br>
 
-        <p>Sebastian</p>
 
-        <img src="cat.jpg"/>
+        <section class="cat-list">
+        </section>
 
-    </section> -->
+        <section class="cat-item">
+
+            <span class="noofclicks">0</span><br>
+
+            <p>Sebastian</p>
+
+            <img src="cat.jpg"/>
+
+        </section>
 
 
     <script>
@@ -55,15 +89,37 @@
             },
             {
                 name: "Sinbad",
-                src: "cat.jpg"
+                src: "cat-2.jpeg"
+            },
+            {
+                name: "Singood",
+                src: "cat-3.jpeg"
+            },
+            {
+                name: "Sinverybad",
+                src: "cat-4.jpeg"
+            },
+            {
+                name: "Sinverygood",
+                src: "cat-5.jpeg"
             }
         ]
 
         for(let cat of catarr){
 
+            let linkup = document.createElement('a');
+
+            linkup.setAttribute('data-cat' , cat.name);
+
+            linkup.textContent = cat.name;
+
+            document.body.querySelector('.cat-list').appendChild(linkup);
+
             let secy = document.createElement('SECTION');
 
             secy.classList.add('cat-item');
+
+            secy.setAttribute('id', cat.name);
 
             secy.innerHTML = `<span class="noofclicks">0</span><br>
 
@@ -75,6 +131,22 @@
 
         }
 
+        document.querySelector('.cat-list').addEventListener('click', (e) => {
+            
+            if(e.target.nodeName === 'A'){
+
+                let cat = e.target.getAttribute('data-cat');
+
+                var currshow = document.querySelector('.show');
+
+                if(currshow !== null){
+                    currshow.classList.remove('show');
+                }
+
+                document.querySelector(`section#${cat}`).classList.add('show');
+            }
+        })
+
         document.querySelectorAll('img').forEach((img) => img.addEventListener('click', (e) =>{
 
             let clickCounter = e.target.parentElement.querySelector('.noofclicks');
@@ -85,7 +157,7 @@
             currno++;
 
             clickCounter.textContent = currno;
-            
+
         })
         )
 
